@@ -6,24 +6,57 @@
 //
 
 import UIKit
+import CoreLocation
 
-class UserLocationVC: UIViewController {
+class UserLocationVC: UIViewController, CLLocationManagerDelegate {
 
+    @IBOutlet weak var labelUserLocation: UILabel!
+    @IBOutlet weak var buttonUserLocation: UIButton!
+    @IBOutlet weak var speedLabel: UILabel!
+    
+    private var playerViewModel: PlayerViewModelType?
+    private var isStaringLocation: Bool = false
+    private var locationManager: CLLocationManager?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        playerViewModel = PlayerVM(fileName: "superMarioSound")
+        locationManager = CLLocationManager()
+        locationManager?.requestAlwaysAuthorization()
+        locationManager?.allowsBackgroundLocationUpdates = true
+        locationManager?.delegate = self
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @IBAction func buttonUserlocationAction(_ sender: UIButton) {
+        if isStaringLocation {
+            playerViewModel?.stopPlayMusic()
+            locationManager?.showsBackgroundLocationIndicator = false
+            locationManager?.stopUpdatingLocation()
+            DispatchQueue.main.async { [self] in
+                buttonUserLocation.setImage(UIImage(systemName: "location.slash"), for: .normal)
+                buttonUserLocation.tintColor = .systemRed
+                labelUserLocation.text = ""
+                speedLabel.text = ""
+            }
+        } else {
+            playerViewModel?.playMusic()
+            locationManager?.showsBackgroundLocationIndicator = true
+            locationManager?.startUpdatingLocation()
+            DispatchQueue.main.async { [self] in
+                buttonUserLocation.imageView?.image = UIImage(systemName: "location")
+                buttonUserLocation.tintColor = .systemBlue
+            }
+        }
+        isStaringLocation = !isStaringLocation
     }
-    */
-
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            DispatchQueue.main.async { [self] in
+                labelUserLocation.text = "широта = \(location.coordinate.latitude) долгота = \(location.coordinate.longitude)"
+                speedLabel.text = "текущая скорость: \(location.speed > 0 ? Int(location.speed*3.6) : 0) км/ч"
+            }
+        }
+    }
+    
 }

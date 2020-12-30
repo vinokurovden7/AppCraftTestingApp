@@ -16,10 +16,55 @@
                     <view key="view" contentMode="scaleToFill" id="Ke6-OQ-Jt0">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="aK7-lY-Khu">
+                                <rect key="frame" x="207" y="450.66666666666669" width="0.0" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GYE-ba-RKp">
+                                <rect key="frame" x="181" y="742.33333333333337" width="52.333333333333343" height="50.666666666666629"/>
+                                <color key="tintColor" systemColor="systemRedColor"/>
+                                <state key="normal" image="location.slash" catalog="system">
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="45"/>
+                                </state>
+                                <connections>
+                                    <action selector="buttonUserlocationAction:" destination="9j5-My-f5K" eventType="touchUpInside" id="1OX-fb-rqM"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kpo-Ad-lt7">
+                                <rect key="frame" x="207" y="108" width="0.0" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Z2t-uE-uH3"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="kpo-Ad-lt7" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Z2t-uE-uH3" secondAttribute="leading" constant="16" id="2sY-41-W2F"/>
+                            <constraint firstItem="Z2t-uE-uH3" firstAttribute="bottom" secondItem="GYE-ba-RKp" secondAttribute="bottom" constant="20" id="5Bi-1G-C2e"/>
+                            <constraint firstItem="GYE-ba-RKp" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Z2t-uE-uH3" secondAttribute="leading" constant="16" id="6b5-Vh-6ub"/>
+                            <constraint firstItem="aK7-lY-Khu" firstAttribute="centerX" secondItem="Z2t-uE-uH3" secondAttribute="centerX" id="R7H-BY-Cjp"/>
+                            <constraint firstItem="Z2t-uE-uH3" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="GYE-ba-RKp" secondAttribute="trailing" constant="16" id="Svl-9Q-FVo"/>
+                            <constraint firstItem="kpo-Ad-lt7" firstAttribute="top" secondItem="Z2t-uE-uH3" secondAttribute="top" constant="20" id="b4J-Sk-TfJ"/>
+                            <constraint firstItem="Z2t-uE-uH3" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="aK7-lY-Khu" secondAttribute="trailing" constant="16" id="b69-qY-XPb"/>
+                            <constraint firstItem="GYE-ba-RKp" firstAttribute="centerX" secondItem="aK7-lY-Khu" secondAttribute="centerX" id="chA-JA-UFG"/>
+                            <constraint firstItem="aK7-lY-Khu" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Z2t-uE-uH3" secondAttribute="leading" constant="16" id="d7B-iH-Jgr"/>
+                            <constraint firstItem="aK7-lY-Khu" firstAttribute="top" relation="greaterThanOrEqual" secondItem="kpo-Ad-lt7" secondAttribute="bottom" constant="5" id="isU-8g-Sd2"/>
+                            <constraint firstItem="kpo-Ad-lt7" firstAttribute="centerX" secondItem="Z2t-uE-uH3" secondAttribute="centerX" id="tyO-oX-Za4"/>
+                            <constraint firstItem="aK7-lY-Khu" firstAttribute="centerY" secondItem="Z2t-uE-uH3" secondAttribute="centerY" id="uaW-Zg-sFM"/>
+                            <constraint firstItem="Z2t-uE-uH3" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="kpo-Ad-lt7" secondAttribute="trailing" constant="16" id="wOC-3Q-yd8"/>
+                            <constraint firstItem="GYE-ba-RKp" firstAttribute="top" relation="greaterThanOrEqual" secondItem="aK7-lY-Khu" secondAttribute="bottom" constant="5" id="ynp-rY-aUP"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Отслеживание геопозиции" id="rrm-Ay-oCR"/>
+                    <connections>
+                        <outlet property="buttonUserLocation" destination="GYE-ba-RKp" id="FcY-fe-2rp"/>
+                        <outlet property="labelUserLocation" destination="aK7-lY-Khu" id="CEn-fH-Ylq"/>
+                        <outlet property="speedLabel" destination="kpo-Ad-lt7" id="qDs-u8-aZj"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TAK-8E-fxi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -458,6 +503,7 @@
         <image name="externaldrive" catalog="system" width="128" height="88"/>
         <image name="icloud.and.arrow.down" catalog="system" width="128" height="112"/>
         <image name="location" catalog="system" width="128" height="121"/>
+        <image name="location.slash" catalog="system" width="128" height="121"/>
         <image name="network" catalog="system" width="128" height="121"/>
         <image name="trash" catalog="system" width="121" height="128"/>
         <systemColor name="systemBackgroundColor">

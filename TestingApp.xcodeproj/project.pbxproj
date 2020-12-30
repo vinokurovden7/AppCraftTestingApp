@@ -31,6 +31,9 @@
 		925BD4A1259BAF91006FAD64 /* DetailSavedAlbumVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925BD4A0259BAF91006FAD64 /* DetailSavedAlbumVM.swift */; };
 		925BD4A4259BAFA8006FAD64 /* DetailSavedAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925BD4A3259BAFA8006FAD64 /* DetailSavedAlbumCell.swift */; };
 		925BD4A7259BAFC6006FAD64 /* DetailSavedAlbumsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925BD4A6259BAFC6006FAD64 /* DetailSavedAlbumsVC.swift */; };
+		925BD4AD259C6CEF006FAD64 /* PlayerViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925BD4AC259C6CEF006FAD64 /* PlayerViewModelType.swift */; };
+		925BD4B0259C6D03006FAD64 /* PlayerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925BD4AF259C6D03006FAD64 /* PlayerVM.swift */; };
+		925BD4B9259C8D09006FAD64 /* superMarioSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 925BD4B8259C8D09006FAD64 /* superMarioSound.mp3 */; };
 		9277005F25975E6E004EA2DA /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9277005E25975E6E004EA2DA /* Structs.swift */; };
 		9277006625976815004EA2DA /* NetworkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9277006525976815004EA2DA /* NetworkCell.swift */; };
 		9277006B25976942004EA2DA /* NetworkCellViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9277006A25976942004EA2DA /* NetworkCellViewModelType.swift */; };
@@ -75,6 +78,9 @@
 		925BD4A0259BAF91006FAD64 /* DetailSavedAlbumVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSavedAlbumVM.swift; sourceTree = "<group>"; };
 		925BD4A3259BAFA8006FAD64 /* DetailSavedAlbumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSavedAlbumCell.swift; sourceTree = "<group>"; };
 		925BD4A6259BAFC6006FAD64 /* DetailSavedAlbumsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSavedAlbumsVC.swift; sourceTree = "<group>"; };
+		925BD4AC259C6CEF006FAD64 /* PlayerViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModelType.swift; sourceTree = "<group>"; };
+		925BD4AF259C6D03006FAD64 /* PlayerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerVM.swift; sourceTree = "<group>"; };
+		925BD4B8259C8D09006FAD64 /* superMarioSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = superMarioSound.mp3; sourceTree = "<group>"; };
 		9277005E25975E6E004EA2DA /* Structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
 		9277006525976815004EA2DA /* NetworkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkCell.swift; sourceTree = "<group>"; };
 		9277006A25976942004EA2DA /* NetworkCellViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkCellViewModelType.swift; sourceTree = "<group>"; };
@@ -123,6 +129,7 @@
 		923DD0F925971A66005B9E66 /* TestingApp */ = {
 			isa = PBXGroup;
 			children = (
+				925BD4B7259C8CD8006FAD64 /* Music */,
 				927700A22599E04C004EA2DA /* Global */,
 				92770073259797DC004EA2DA /* Realm */,
 				923DD13125974B9E005B9E66 /* Network */,
@@ -147,6 +154,7 @@
 				9277007E2597A518004EA2DA /* DetailNetworkAlbumViewModelType.swift */,
 				925BD485259B307D006FAD64 /* SavedAlbumViewModelType.swift */,
 				925BD49A259BAF71006FAD64 /* DetailSavedAlbumViewModelType.swift */,
+				925BD4AC259C6CEF006FAD64 /* PlayerViewModelType.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -156,10 +164,10 @@
 			children = (
 				92770064259767EE004EA2DA /* CustomCell */,
 				923DD11F25972A1A005B9E66 /* NetworkCollectionVC.swift */,
-				923DD12625972A87005B9E66 /* UserLocationVC.swift */,
 				9277007B2597A4EC004EA2DA /* DetailNetworkAlbumVC.swift */,
 				925BD494259B3AB3006FAD64 /* SavedAlbumsVC.swift */,
 				925BD4A6259BAFC6006FAD64 /* DetailSavedAlbumsVC.swift */,
+				923DD12625972A87005B9E66 /* UserLocationVC.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -181,8 +189,17 @@
 				927700902597B3ED004EA2DA /* DetailNetworkAlbumVM.swift */,
 				925BD488259B30B7006FAD64 /* SavedAlbumVM.swift */,
 				925BD4A0259BAF91006FAD64 /* DetailSavedAlbumVM.swift */,
+				925BD4AF259C6D03006FAD64 /* PlayerVM.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		925BD4B7259C8CD8006FAD64 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				925BD4B8259C8D09006FAD64 /* superMarioSound.mp3 */,
+			);
+			path = Music;
 			sourceTree = "<group>";
 		};
 		92770061259764D9004EA2DA /* DefaultClasses */ = {
@@ -321,6 +338,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				923DD10725971A67005B9E66 /* LaunchScreen.storyboard in Resources */,
+				925BD4B9259C8D09006FAD64 /* superMarioSound.mp3 in Resources */,
 				923DD10425971A67005B9E66 /* Assets.xcassets in Resources */,
 				923DD10225971A66005B9E66 /* Main.storyboard in Resources */,
 			);
@@ -380,10 +398,12 @@
 				927700882597AFAA004EA2DA /* DetailNetworkAlbumCellVM.swift in Sources */,
 				925BD48C259B37BA006FAD64 /* SavedAlbumCell.swift in Sources */,
 				927700A42599E062004EA2DA /* SharedVariables.swift in Sources */,
+				925BD4B0259C6D03006FAD64 /* PlayerVM.swift in Sources */,
 				925BD4A7259BAFC6006FAD64 /* DetailSavedAlbumsVC.swift in Sources */,
 				925BD489259B30B7006FAD64 /* SavedAlbumVM.swift in Sources */,
 				923DD0FD25971A66005B9E66 /* SceneDelegate.swift in Sources */,
 				9277007025976AF6004EA2DA /* NetworkCellVM.swift in Sources */,
+				925BD4AD259C6CEF006FAD64 /* PlayerViewModelType.swift in Sources */,
 				92770075259797EC004EA2DA /* StorageManager.swift in Sources */,
 				9277008D2597B1E7004EA2DA /* DetailNetworkAlbumCell.swift in Sources */,
 				925BD48F259B37CD006FAD64 /* SavedAlbumCellVM.swift in Sources */,

@@ -170,7 +170,7 @@ extension NetworkCollectionVC: UICollectionViewDelegateFlowLayout {
         if let status = dictionaryLoadingStatusForIndexPath[indexPath] {
             guard let cellVM = cellViewModel else {return collectionViewCell}
             cellVM.updateStatusLoading(cell: collectionViewCell, status: status)
-            dictionaryLoadingStatusForIndexPath.removeValue(forKey: indexPath)
+            if status != 1 { dictionaryLoadingStatusForIndexPath.removeValue(forKey: indexPath) }
         } else {
             guard let cellVM = cellViewModel else {return collectionViewCell}
             cellVM.updateStatusLoading(cell: collectionViewCell, status: nil)
