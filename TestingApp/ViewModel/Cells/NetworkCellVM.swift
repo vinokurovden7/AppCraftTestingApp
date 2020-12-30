@@ -51,7 +51,7 @@ class NetworkCellVM: NetworkCellViewModelType {
                 break
             }
         } else {
-            if storageManager.getAlbum(userId: album.id)?.count ?? 0 > 0 {
+            if storageManager.getAlbum(userId: album.id, title: nil)?.count ?? 0 > 0 {
                 DispatchQueue.main.async {
                     cell.activityIndicatorView.stopAnimating()
                     cell.activityIndicatorView.isHidden = true

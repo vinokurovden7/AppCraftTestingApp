@@ -19,15 +19,6 @@ class StorageManager {
         }
     }
     
-    /// Удаление альбома
-    /// - Parameter album: альбом
-    func deleteAlbum(album: AlbumObject) {
-        let realm = try! Realm()
-        try! realm.write {
-            realm.delete(album)
-        }
-    }
-    
     /// Сохранение фотграфий альбома
     /// - Parameter photoArray: массив фотографий
     func savePhoto(photo: PhotoObject) {
@@ -37,9 +28,45 @@ class StorageManager {
         }
     }
     
-    func getAlbum(userId: Int) -> Results<AlbumObject>! {
+    func getAlbum(userId: Int?, title: String?) -> Results<AlbumObject>! {
+        if let id = userId, let title = title {
+            let realm = try! Realm()
+            return realm.objects(AlbumObject.self).filter("id == %@ and title CONTAINS[c] %@", id, title).sorted(byKeyPath: "userId").sorted(byKeyPath: "id")
+        } else if let id = userId {
+            let realm = try! Realm()
+            return realm.objects(AlbumObject.self).filter("id == %@", id).sorted(byKeyPath: "userId").sorted(byKeyPath: "id")
+        } else if let title = title  {
+            let realm = try! Realm()
+            return realm.objects(AlbumObject.self).filter("title CONTAINS[c] %@", title).sorted(byKeyPath: "userId").sorted(byKeyPath: "id")
+        } else {
+            let realm = try! Realm()
+            return realm.objects(AlbumObject.self).sorted(byKeyPath: "userId").sorted(byKeyPath: "id")
+        }
+        
+    }
+    
+    func getPhoto(albumId: Int, title: String?) -> Results<PhotoObject>! {
+        if let title = title  {
+            let realm = try! Realm()
+            return realm.objects(PhotoObject.self).filter("albumId == %@ and title CONTAINS[c] %@", albumId, title).sorted(byKeyPath: "id")
+        } else {
+            let realm = try! Realm()
+            return realm.objects(PhotoObject.self).filter("albumId == %@", albumId).sorted(byKeyPath: "id")
+        }
+        
+    }
+    
+    /// Удаление фотографий альбома
+    /// - Parameter photosArray: Массив альбомов
+    func deleteAlbumWithPhoto(albumId: Int) {
         let realm = try! Realm()
-        return realm.objects(AlbumObject.self).filter("id == %@", userId)
+        try! realm.write {
+            realm.delete(getPhoto(albumId: albumId, title: nil))
+        }
+        let album = realm.objects(AlbumObject.self).filter("id == %@", albumId)
+        try! realm.write {
+            realm.delete(album)
+        }
     }
     
 }

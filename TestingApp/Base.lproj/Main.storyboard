@@ -47,25 +47,59 @@
         <!--Сохраненные альбомы-->
         <scene sceneID="vix-ui-9Y0">
             <objects>
-                <collectionViewController id="Uv8-uC-47O" customClass="LocalStorageCollectionVC" customModule="TestingApp" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController id="Uv8-uC-47O" customClass="SavedAlbumsVC" customModule="TestingApp" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="Z8f-8Y-MQ0">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="zHL-O5-plI">
-                            <size key="itemSize" width="128" height="128"/>
+                            <size key="itemSize" width="271" height="128"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="localAlbumCell" id="xx9-JZ-wMc">
-                                <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="savedAlbumCell" id="xx9-JZ-wMc" customClass="SavedAlbumCell" customModule="TestingApp" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="174" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="qVS-W6-b4l">
-                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="174" height="60"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T5R-1Z-tnW">
+                                            <rect key="frame" x="0.0" y="0.0" width="174" height="60"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="5yQ-5B-KaH">
+                                                    <rect key="frame" x="16" y="18" width="44" height="24"/>
+                                                    <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="174" id="YFr-iV-S2K"/>
+                                                <constraint firstAttribute="height" constant="60" id="c3G-wY-Ojj"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="5yQ-5B-KaH" firstAttribute="centerY" secondItem="qVS-W6-b4l" secondAttribute="centerY" id="7U2-sm-2cP"/>
+                                        <constraint firstAttribute="trailing" secondItem="T5R-1Z-tnW" secondAttribute="trailing" id="GTR-Kv-5mN"/>
+                                        <constraint firstItem="T5R-1Z-tnW" firstAttribute="top" secondItem="qVS-W6-b4l" secondAttribute="top" id="QAx-tm-pVf"/>
+                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="5yQ-5B-KaH" secondAttribute="bottom" constant="5" id="ZwA-2f-E6N"/>
+                                        <constraint firstItem="5yQ-5B-KaH" firstAttribute="top" relation="greaterThanOrEqual" secondItem="qVS-W6-b4l" secondAttribute="top" constant="5" id="cSJ-Ua-7R7"/>
+                                        <constraint firstItem="T5R-1Z-tnW" firstAttribute="leading" secondItem="qVS-W6-b4l" secondAttribute="leading" id="rvC-qh-ock"/>
+                                        <constraint firstItem="5yQ-5B-KaH" firstAttribute="leading" secondItem="qVS-W6-b4l" secondAttribute="leading" constant="16" id="uvj-FS-xoP"/>
+                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="5yQ-5B-KaH" secondAttribute="trailing" constant="16" id="vo4-w8-hMd"/>
+                                        <constraint firstAttribute="bottom" secondItem="T5R-1Z-tnW" secondAttribute="bottom" id="zwN-45-CQJ"/>
+                                    </constraints>
                                 </collectionViewCellContentView>
+                                <connections>
+                                    <outlet property="cellBackgroundView" destination="T5R-1Z-tnW" id="2n8-wf-DDK"/>
+                                    <outlet property="nameAlbumLabel" destination="5yQ-5B-KaH" id="7Ol-xp-ut4"/>
+                                    <outlet property="withIthemConstraint" destination="YFr-iV-S2K" id="CiS-gr-En6"/>
+                                </connections>
                             </collectionViewCell>
                         </cells>
                         <connections>
@@ -74,10 +108,13 @@
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" title="Сохраненные альбомы" id="8E0-OV-wl6"/>
+                    <connections>
+                        <segue destination="yfT-GD-tZ3" kind="show" identifier="showDetailSavedAlbum" id="BeH-xw-gP9"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fPe-IA-gdr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1284.0579710144928" y="0.6696428571428571"/>
+            <point key="canvasLocation" x="1282.608695652174" y="0.6696428571428571"/>
         </scene>
         <!--Альбомы-->
         <scene sceneID="Vy1-xw-o9g">
@@ -105,7 +142,7 @@
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nlf-zR-Hhi">
                                             <rect key="frame" x="0.0" y="0.0" width="174" height="60"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="u9K-lq-xGU">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="u9K-lq-xGU">
                                                     <rect key="frame" x="16" y="5" width="108" height="50"/>
                                                     <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -265,7 +302,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BLq-q9-sOH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2082.608695652174" y="-690.40178571428567"/>
+            <point key="canvasLocation" x="2080" y="-690"/>
         </scene>
         <!--Сеть-->
         <scene sceneID="PrG-kf-a53">
@@ -324,12 +361,105 @@
             </objects>
             <point key="canvasLocation" x="373.91304347826087" y="750"/>
         </scene>
+        <!--Просмотр альбома-->
+        <scene sceneID="kPK-kx-ar5">
+            <objects>
+                <collectionViewController id="yfT-GD-tZ3" customClass="DetailSavedAlbumsVC" customModule="TestingApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" id="aT5-XF-qnq">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="vbz-t0-kvg">
+                            <size key="itemSize" width="255" height="161"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="savedPhotoCell" id="U2h-Mk-TeX" customClass="DetailSavedAlbumCell" customModule="TestingApp" customModuleProvider="target">
+                                <rect key="frame" x="88.333333333333329" y="0.0" width="237.33333333333337" height="84"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="gCJ-3B-QEn">
+                                    <rect key="frame" x="0.0" y="0.0" width="237.33333333333337" height="84"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OOH-Xr-jdS">
+                                            <rect key="frame" x="0.0" y="0.0" width="237.33333333333334" height="84"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="s3Q-Hn-Iy9">
+                                                    <rect key="frame" x="16" y="10" width="64" height="64"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="s3Q-Hn-Iy9" secondAttribute="height" multiplier="1:1" id="c1b-gi-9LN"/>
+                                                        <constraint firstAttribute="width" constant="64" id="xSh-jT-Wmd"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="wzA-xB-cvD">
+                                                    <rect key="frame" x="100" y="10" width="127.33333333333331" height="64"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="LfJ-JJ-Uh7"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <constraints>
+                                                <constraint firstItem="wzA-xB-cvD" firstAttribute="leading" secondItem="s3Q-Hn-Iy9" secondAttribute="trailing" constant="20" id="2wK-RT-ZZC"/>
+                                                <constraint firstAttribute="width" constant="237.33333333333334" id="AO3-vf-E7v"/>
+                                                <constraint firstItem="s3Q-Hn-Iy9" firstAttribute="leading" secondItem="OOH-Xr-jdS" secondAttribute="leading" constant="16" id="Cn4-OZ-PVm"/>
+                                                <constraint firstItem="wzA-xB-cvD" firstAttribute="bottom" secondItem="s3Q-Hn-Iy9" secondAttribute="bottom" id="Efs-3X-QJB"/>
+                                                <constraint firstAttribute="trailing" secondItem="wzA-xB-cvD" secondAttribute="trailing" constant="10" id="O0l-aT-kYe"/>
+                                                <constraint firstItem="s3Q-Hn-Iy9" firstAttribute="top" secondItem="OOH-Xr-jdS" secondAttribute="top" constant="10" id="P98-JO-2gl"/>
+                                                <constraint firstItem="wzA-xB-cvD" firstAttribute="top" secondItem="s3Q-Hn-Iy9" secondAttribute="top" id="UzT-Hx-XL4"/>
+                                                <constraint firstAttribute="bottom" secondItem="s3Q-Hn-Iy9" secondAttribute="bottom" constant="10" id="gsK-qz-ZpJ"/>
+                                                <constraint firstItem="s3Q-Hn-Iy9" firstAttribute="centerY" secondItem="OOH-Xr-jdS" secondAttribute="centerY" id="vOZ-72-ykR"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="OOH-Xr-jdS" firstAttribute="leading" secondItem="gCJ-3B-QEn" secondAttribute="leading" id="9Zs-bU-0U4"/>
+                                        <constraint firstAttribute="trailing" secondItem="OOH-Xr-jdS" secondAttribute="trailing" id="Car-ew-zaR"/>
+                                        <constraint firstItem="OOH-Xr-jdS" firstAttribute="top" secondItem="gCJ-3B-QEn" secondAttribute="top" id="PAg-IT-Dft"/>
+                                        <constraint firstAttribute="bottom" secondItem="OOH-Xr-jdS" secondAttribute="bottom" id="gso-u0-vSI"/>
+                                    </constraints>
+                                </collectionViewCellContentView>
+                                <connections>
+                                    <outlet property="cellBackgroundView" destination="OOH-Xr-jdS" id="17J-p7-feT"/>
+                                    <outlet property="nameAlbumLabel" destination="wzA-xB-cvD" id="fku-SH-h3u"/>
+                                    <outlet property="previewImage" destination="s3Q-Hn-Iy9" id="U7F-kC-bEX"/>
+                                    <outlet property="withIthemConstraint" destination="AO3-vf-E7v" id="JVd-hr-xGe"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="yfT-GD-tZ3" id="h7d-Ab-cpn"/>
+                            <outlet property="delegate" destination="yfT-GD-tZ3" id="qL8-ix-xb4"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" title="Просмотр альбома" largeTitleDisplayMode="never" id="AVn-38-aIY">
+                        <barButtonItem key="rightBarButtonItem" image="trash" catalog="system" id="z9e-vc-Q2t">
+                            <color key="tintColor" systemColor="systemRedColor"/>
+                            <connections>
+                                <action selector="deleteBarButtonItemAction:" destination="yfT-GD-tZ3" id="Zg4-UQ-wMz"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="deleteBarButtonItem" destination="z9e-vc-Q2t" id="fEa-Xa-5D1"/>
+                    </connections>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="u8v-Im-9SU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2080" y="1"/>
+        </scene>
     </scenes>
     <resources>
         <image name="externaldrive" catalog="system" width="128" height="88"/>
         <image name="icloud.and.arrow.down" catalog="system" width="128" height="112"/>
         <image name="location" catalog="system" width="128" height="121"/>
         <image name="network" catalog="system" width="128" height="121"/>
+        <image name="trash" catalog="system" width="121" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
@@ -338,6 +468,9 @@
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

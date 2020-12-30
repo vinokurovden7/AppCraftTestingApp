@@ -8,21 +8,21 @@ import RealmSwift
 
 /// Объект альбома
 class AlbumObject: Object {
-    @objc dynamic var idAlbum = NSUUID().uuidString
+    @objc dynamic var albumObjectID = ""
     @objc dynamic var id = 0
     @objc dynamic var userId = 0
     @objc dynamic var title = ""
     
     override class func primaryKey() -> String? {
-        return "idAlbum"
+        return "id"
     }
 }
 
 /// Объект фотографии
 class PhotoObject: Object {
-    @objc dynamic var idPhoto = NSUUID().uuidString
-    @objc dynamic var albumId = 0
+    @objc dynamic var photoObjectId = ""
     @objc dynamic var id = 0
+    @objc dynamic var albumId = 0
     @objc dynamic var title = ""
     @objc dynamic var url = ""
     @objc dynamic var thumbnailUrl = ""
@@ -30,6 +30,6 @@ class PhotoObject: Object {
     @objc dynamic var photo: Data?
     
     override class func primaryKey() -> String? {
-        return "idPhoto"
+        return "photoObjectId"
     }
 }

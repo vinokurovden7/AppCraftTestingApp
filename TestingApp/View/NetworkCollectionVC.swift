@@ -18,8 +18,14 @@ class NetworkCollectionVC: UICollectionViewController {
     //Отступ от краев экрана и между ячейками, если их в строке больше 1
     private let paddingPlit:CGFloat = 15
     private var dictionaryLoadingStatusForIndexPath: [IndexPath:Int] = [:]
-    
     @IBOutlet var albumsCollectionView: UICollectionView!
+    let loadingIndicator: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.color = .black
+        return spinner
+    }()
+    private let refreshControl = UIRefreshControl()
     
     //MARK: Жизненный цикл
     override func viewLayoutMarginsDidChange() {
@@ -30,7 +36,10 @@ class NetworkCollectionVC: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addRefreshControl()
         NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("albumIsLoaded"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("photosDeleted"), object: nil)
+        activityIndicator(startAnimate: true)
         viewModel = NetworkVM()
         guard let viewModel = viewModel else { return }
         viewModel.getAlbums()
@@ -74,13 +83,52 @@ class NetworkCollectionVC: UICollectionViewController {
                 }
             }
         } else if let userInfo = notification.userInfo as? [String: Bool] {
-            guard let isLoaded = userInfo["isLoaded"] else {return}
-            if isLoaded {
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
+            if let isLoaded = userInfo["isLoaded"] {
+                if isLoaded {
+                    DispatchQueue.main.async {
+                        self.refreshControl.endRefreshing()
+                        self.collectionView.reloadData()
+                    }
+                    activityIndicator(startAnimate: false)
+                }
+            } else if let isDeleted = userInfo["isDeleted"] {
+                if isDeleted {
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadData()
+                    }
                 }
             }
         }
+    }
+    
+    private func activityIndicator(startAnimate: Bool) {
+        if startAnimate {
+            DispatchQueue.main.async(){ [self] in
+                self.view.addSubview(loadingIndicator)
+                loadingIndicator.startAnimating()
+                NSLayoutConstraint.activate([loadingIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                                             loadingIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)])
+                self.view.bringSubviewToFront(loadingIndicator)
+            }
+        } else {
+            DispatchQueue.main.async(){ [self] in
+                loadingIndicator.stopAnimating()
+                loadingIndicator.removeFromSuperview()
+            }
+        }
+    }
+    
+    //Обновление записей
+    private func addRefreshControl(){
+        collectionView.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(refreshList), for: .valueChanged)
+        refreshControl.tintColor = UIColor.black
+        refreshControl.attributedTitle = NSAttributedString(string: "Обновление записей ...")
+    }
+    
+    @objc func refreshList(){
+        guard let viewModel = viewModel else { return }
+        viewModel.getAlbums()
     }
     
 }
@@ -89,6 +137,15 @@ extension NetworkCollectionVC: UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         globalIndexPath = indexPath
+        UIView.animate(withDuration: 0.12, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 4, options: .curveEaseIn, animations: {
+            collectionView.cellForItem(at: indexPath)?.transform.a = 0.9
+            collectionView.cellForItem(at: indexPath)?.transform.d = 0.9
+        }) { (_) in
+            UIView.animate(withDuration: 0.12, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 4, options: .curveEaseIn, animations: {
+                collectionView.cellForItem(at: indexPath)?.transform.a = 1
+                collectionView.cellForItem(at: indexPath)?.transform.d = 1
+            })
+        }
         self.performSegue(withIdentifier: "showDetailAlbum", sender: self)
     }
     
@@ -113,6 +170,7 @@ extension NetworkCollectionVC: UICollectionViewDelegateFlowLayout {
         if let status = dictionaryLoadingStatusForIndexPath[indexPath] {
             guard let cellVM = cellViewModel else {return collectionViewCell}
             cellVM.updateStatusLoading(cell: collectionViewCell, status: status)
+            dictionaryLoadingStatusForIndexPath.removeValue(forKey: indexPath)
         } else {
             guard let cellVM = cellViewModel else {return collectionViewCell}
             cellVM.updateStatusLoading(cell: collectionViewCell, status: nil)

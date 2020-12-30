@@ -20,9 +20,6 @@ class NetworkVM: NetworkViewModelType {
         networkManager.getAlbumsRequest(url: albumsUrl, completion: { [self] albums in
             albumsArray = albums
             NotificationCenter.default.post(name: Notification.Name("albumIsLoaded"),object: nil, userInfo: ["isLoaded":true])
-//            DispatchQueue.main.async {
-//                self.collectionView.reloadData()
-//            }
         })
     }
     
@@ -49,7 +46,7 @@ class NetworkVM: NetworkViewModelType {
     }
     
     func checkIsLoaded(id: Int) -> Bool {
-        return storageManager.getAlbum(userId: id)?.count ?? 0 > 0
+        return storageManager.getAlbum(userId: id, title: nil)?.count ?? 0 > 0
     }
 
 }

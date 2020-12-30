@@ -22,9 +22,7 @@ class DetailNetworkAlbumVM: DetailNetworkAlbumViewModelType {
         let networkManager: NetworkRequests = NetworkRequests()
         networkManager.getPhotoAlbum(url: photosUrl, parameters: albumId) { [self] photos in
             photosArray = photos
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
+            NotificationCenter.default.post(name: Notification.Name("photoIsLoaded"),object: nil, userInfo: ["isLoaded":true])
         }
     }
     
@@ -43,6 +41,7 @@ class DetailNetworkAlbumVM: DetailNetworkAlbumViewModelType {
     
     func saveAlbum(album: Album, completion: @escaping (Bool) -> ()) {
         let albumObject = AlbumObject()
+        albumObject.albumObjectID = "\(album.id)\(album.userId)"
         albumObject.id = album.id
         albumObject.title = album.title
         albumObject.userId = album.userId
@@ -52,8 +51,9 @@ class DetailNetworkAlbumVM: DetailNetworkAlbumViewModelType {
         for photo in photosArray {
             DispatchQueue.global(qos: .background).async {
                 let ph = PhotoObject()
-                ph.albumId = photo.albumId
+                ph.photoObjectId = "\(photo.id)\(photo.albumId)"
                 ph.id = photo.id
+                ph.albumId = photo.albumId
                 ph.title = photo.title
                 ph.thumbnailUrl = photo.thumbnailUrl
                 ph.url = photo.url
@@ -62,7 +62,7 @@ class DetailNetworkAlbumVM: DetailNetworkAlbumViewModelType {
                     self.downloadImageFromUrl(url: photo.url) { imageData in
                         ph.photo = imageData
                         storageManager.savePhoto(photo: ph)
-                        //print("saved: \(ph)")
+                        NotificationCenter.default.post(name: Notification.Name("photoLoaded"),object: nil, userInfo: ["isLoaded":true])
                         countPhotos += 1
                         if countPhotos == self.photosArray.count {
                             completion(imageData == nil)
@@ -84,33 +84,9 @@ class DetailNetworkAlbumVM: DetailNetworkAlbumViewModelType {
         }
     }
     
-    private func generatePhotosArray(completion: @escaping ([PhotoObject]) -> ()) {
-        var photosObjectArray: [PhotoObject] = []
-        for photo in photosArray {
-            DispatchQueue.global(qos: .utility).async {
-                let ph = PhotoObject()
-                ph.albumId = photo.albumId
-                ph.id = photo.id
-                ph.title = photo.title
-                ph.thumbnailUrl = photo.thumbnailUrl
-                ph.url = photo.url
-                self.downloadImageFromUrl(url: photo.thumbnailUrl) { imageData in
-                    ph.previewPhoto = imageData
-                }
-                self.downloadImageFromUrl(url: photo.url) { imageData in
-                    ph.photo = imageData
-                    photosObjectArray.append(ph)
-                    if photosObjectArray.count == self.photosArray.count {
-                        completion(photosObjectArray)
-                    }
-                }
-            }
-        }
-    }
-    
     func checkIsLoaded(id: Int) -> Bool {
         let storageManager = StorageManager()
-        return storageManager.getAlbum(userId: id)?.count ?? 0 > 0
+        return storageManager.getAlbum(userId: id, title: nil)?.count ?? 0 > 0
     }
     
 }

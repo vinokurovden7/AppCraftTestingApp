@@ -20,6 +20,13 @@ class DetailNetworkAlbumVC: UICollectionViewController {
     private var countItems:CGFloat = 1
     //Отступ от краев экрана и между ячейками, если их в строке больше 1
     private let paddingPlit:CGFloat = 15
+    let loadingIndicator: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.color = .black
+        return spinner
+    }()
+    private let refreshControl = UIRefreshControl()
     
     //MARK: Жизненный цикл
     override func viewLayoutMarginsDidChange() {
@@ -36,10 +43,14 @@ class DetailNetworkAlbumVC: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addRefreshControl()
+        activityIndicator(startAnimate: true)
         viewModel = DetailNetworkAlbumVM(collectionView: collectionView)
         guard let viewModel = viewModel, let album = album else { return }
         viewModel.getPhotos(albumId: String(album.id))
         NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("loadingStatus"), object: self)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("photoIsLoaded"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("photosDeleted"), object: nil)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -65,8 +76,27 @@ class DetailNetworkAlbumVC: UICollectionViewController {
     /// Функция обработки notification
     /// - Parameter notification: входящий notification
     @objc func updateInterface(notification: Notification) {
-        guard let userInfo = notification.userInfo as? [String: [IndexPath:Int]], let status = userInfo["status"] else {return}
-        for (key,value) in status { if indexPath == key { updateStatusLoading(status: value) } }
+        
+        if let userInfo = notification.userInfo as? [String: [IndexPath:Int]], let status = userInfo["status"] {
+            for (key,value) in status { if indexPath == key { updateStatusLoading(status: value) } }
+        } else if let userInfo = notification.userInfo as? [String: Bool] {
+            if let isLoaded = userInfo["isLoaded"] {
+                if isLoaded {
+                    DispatchQueue.main.async {
+                        self.refreshControl.endRefreshing()
+                        self.collectionView.reloadData()
+                    }
+                    activityIndicator(startAnimate: false)
+                }
+            } else if let isDeleted = userInfo["isDeleted"] {
+                if isDeleted {
+                    guard let viewModel = viewModel, let album = album else { return }
+                    DispatchQueue.main.async { [self] in
+                        viewModel.checkIsLoaded(id: album.id) ? setImageStatusLoading(color: .systemGreen, systemName: "checkmark.icloud") : setImageStatusLoading(color: .systemBlue, systemName: "icloud.and.arrow.down")
+                    }
+                }
+            }
+        }
     }
     
     /// Обновить значок статуса загрузки
@@ -97,6 +127,36 @@ class DetailNetworkAlbumVC: UICollectionViewController {
         }
     }
     
+    private func activityIndicator(startAnimate: Bool) {
+        if startAnimate {
+            DispatchQueue.main.async(){ [self] in
+                self.view.addSubview(loadingIndicator)
+                loadingIndicator.startAnimating()
+                NSLayoutConstraint.activate([loadingIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                                             loadingIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)])
+                self.view.bringSubviewToFront(loadingIndicator)
+            }
+        } else {
+            DispatchQueue.main.async(){ [self] in
+                loadingIndicator.stopAnimating()
+                loadingIndicator.removeFromSuperview()
+            }
+        }
+    }
+    
+    //Обновление записей
+    func addRefreshControl(){
+        collectionView.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(refreshList), for: .valueChanged)
+        refreshControl.tintColor = UIColor.black
+        refreshControl.attributedTitle = NSAttributedString(string: "Обновление записей ...")
+    }
+    
+    @objc func refreshList(){
+        guard let viewModel = viewModel, let album = album else { return }
+        viewModel.getPhotos(albumId: String(album.id))
+    }
+    
 }
 
 extension DetailNetworkAlbumVC: UICollectionViewDelegateFlowLayout {
@@ -109,7 +169,6 @@ extension DetailNetworkAlbumVC: UICollectionViewDelegateFlowLayout {
         guard let viewModel = viewModel else { return 1 }
         return viewModel.getNumberOfSections()
     }
-
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let viewModel = viewModel else { return 1 }
