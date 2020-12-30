@@ -12,6 +12,7 @@ class NetworkVM: NetworkViewModelType {
     private var albumsArray: [Album] = []
     private let albumsUrl = "https://jsonplaceholder.typicode.com/albums"
     private let storageManager = StorageManager()
+    private var selectedIndexPath: IndexPath?
     
     //MARK: Методы
     /// Получение альбомов из сети
@@ -47,6 +48,16 @@ class NetworkVM: NetworkViewModelType {
     
     func checkIsLoaded(id: Int) -> Bool {
         return storageManager.getAlbum(userId: id, title: nil)?.count ?? 0 > 0
+    }
+    
+    //MARK: Получить выбранную запись
+    func selectRow(atIndexPath indexPath: IndexPath) {
+        self.selectedIndexPath = indexPath
+    }
+    
+    //MARK: Получить IndexPath выбранной записи
+    func getIndexPathSelectedRow() -> IndexPath {
+        return self.selectedIndexPath ?? IndexPath(row: 0, section: 0)
     }
 
 }

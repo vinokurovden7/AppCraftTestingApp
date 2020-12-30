@@ -26,7 +26,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GYE-ba-RKp">
                                 <rect key="frame" x="181" y="742.33333333333337" width="52.333333333333343" height="50.666666666666629"/>
                                 <color key="tintColor" systemColor="systemRedColor"/>
-                                <state key="normal" image="location.slash" catalog="system">
+                                <state key="normal" image="location" catalog="system">
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="45"/>
                                 </state>
                                 <connections>
@@ -343,11 +343,28 @@
                     <connections>
                         <outlet property="detailCollectionView" destination="WTV-TC-fT2" id="vDy-u6-s1S"/>
                         <outlet property="downloadAlbumButton" destination="yyf-N9-e6B" id="J0I-e1-1xy"/>
+                        <segue destination="3He-4E-eGc" kind="show" identifier="showImage" id="Mg5-9J-xNo"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BLq-q9-sOH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2080" y="-690"/>
+        </scene>
+        <!--View ImageVC-->
+        <scene sceneID="AXl-cx-m2L">
+            <objects>
+                <viewController id="3He-4E-eGc" customClass="ViewImageVC" customModule="TestingApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nNH-aw-9Ed">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="ObI-pT-G9N"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="UzE-YP-LNi"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AuS-q0-NgF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2857" y="-690"/>
         </scene>
         <!--Сеть-->
         <scene sceneID="PrG-kf-a53">
@@ -492,6 +509,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="deleteBarButtonItem" destination="z9e-vc-Q2t" id="fEa-Xa-5D1"/>
+                        <segue destination="3He-4E-eGc" kind="show" identifier="showSavedImage" id="82i-Kw-3zj"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u8v-Im-9SU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -499,11 +517,13 @@
             <point key="canvasLocation" x="2080" y="1"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="82i-Kw-3zj"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="externaldrive" catalog="system" width="128" height="88"/>
         <image name="icloud.and.arrow.down" catalog="system" width="128" height="112"/>
         <image name="location" catalog="system" width="128" height="121"/>
-        <image name="location.slash" catalog="system" width="128" height="121"/>
         <image name="network" catalog="system" width="128" height="121"/>
         <image name="trash" catalog="system" width="121" height="128"/>
         <systemColor name="systemBackgroundColor">

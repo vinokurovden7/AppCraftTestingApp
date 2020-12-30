@@ -13,4 +13,8 @@ protocol NetworkViewModelType {
     func cellViewModel(forIndexPath indexPath: IndexPath) -> NetworkCellViewModelType?
     func getAlbum(for indexPath: IndexPath) -> Album
     func checkIsLoaded(id: Int) -> Bool
+    //MARK: Выбор ячейки
+    func selectRow(atIndexPath indexPath: IndexPath)
+    //MARK: Получить IndexPath выделенной ячейки
+    func getIndexPathSelectedRow() -> IndexPath
 }

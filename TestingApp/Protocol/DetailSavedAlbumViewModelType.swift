@@ -12,4 +12,8 @@ protocol DetailSavedAlbumViewModelType {
     func getNumbersItemsInSection() -> Int
     func cellViewModel(forIndexPath indexPath: IndexPath) -> DetailSavedAlbumCellViewModelType?
     func confirmDeleteAlert() -> UIAlertController
+    //MARK: Выбор ячейки
+    func selectRow(atIndexPath indexPath: IndexPath)
+    //MARK: Получить IndexPath выделенной ячейки
+    func getIndexPathSelectedRow() -> IndexPath
 }

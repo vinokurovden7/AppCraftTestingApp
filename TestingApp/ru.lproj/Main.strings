@@ -1,0 +1,36 @@
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "0Kf-rr-6F4"; */
+"0Kf-rr-6F4.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "5yQ-5B-KaH"; */
+"5yQ-5B-KaH.text" = "Label";
+
+/* Class = "UINavigationItem"; title = "Сохраненные альбомы"; ObjectID = "8E0-OV-wl6"; */
+"8E0-OV-wl6.title" = "Сохраненные альбомы";
+
+/* Class = "UINavigationItem"; title = "Просмотр альбома"; ObjectID = "AVn-38-aIY"; */
+"AVn-38-aIY.title" = "Просмотр альбома";
+
+/* Class = "UITabBarItem"; title = "Геолокация"; ObjectID = "EBI-Rp-mA8"; */
+"EBI-Rp-mA8.title" = "Геолокация";
+
+/* Class = "UINavigationItem"; title = "Альбомы"; ObjectID = "GvW-6H-yz3"; */
+"GvW-6H-yz3.title" = "Альбомы";
+
+/* Class = "UITabBarItem"; title = "Сеть"; ObjectID = "H0g-lb-vJz"; */
+"H0g-lb-vJz.title" = "Сеть";
+
+/* Class = "UITabBarItem"; title = "БД"; ObjectID = "LNc-oS-N2I"; */
+"LNc-oS-N2I.title" = "БД";
+
+/* Class = "UINavigationItem"; title = "Просмотр альбома"; ObjectID = "Zu5-uv-jZR"; */
+"Zu5-uv-jZR.title" = "Просмотр альбома";
+
+/* Class = "UINavigationItem"; title = "Отслеживание геопозиции"; ObjectID = "rrm-Ay-oCR"; */
+"rrm-Ay-oCR.title" = "Отслеживание геопозиции";
+
+/* Class = "UILabel"; text = "Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст "; ObjectID = "u9K-lq-xGU"; */
+"u9K-lq-xGU.text" = "Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст ";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "wzA-xB-cvD"; */
+"wzA-xB-cvD.text" = "Label";

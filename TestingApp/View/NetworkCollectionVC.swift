@@ -12,19 +12,13 @@ class NetworkCollectionVC: UICollectionViewController {
     //MARK: Переменные
     private let reuseIdentifier = "networkAlbumCell"
     private var viewModel: NetworkViewModelType?
-    private var globalIndexPath: IndexPath? = nil
     //Количество ячеек в строке
     private var countItems:CGFloat = 1
     //Отступ от краев экрана и между ячейками, если их в строке больше 1
     private let paddingPlit:CGFloat = 15
     private var dictionaryLoadingStatusForIndexPath: [IndexPath:Int] = [:]
     @IBOutlet var albumsCollectionView: UICollectionView!
-    let loadingIndicator: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView()
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        spinner.color = .black
-        return spinner
-    }()
+    private let loadingIndicator = SharedVariables.sharedVariables.loadingIndicator
     private let refreshControl = UIRefreshControl()
     
     //MARK: Жизненный цикл
@@ -59,11 +53,10 @@ class NetworkCollectionVC: UICollectionViewController {
         case "showDetailAlbum":
             guard let destination = segue.destination as? DetailNetworkAlbumVC else { return }
             NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("loadingStatus"), object: destination)
-            if let indexPath = globalIndexPath {
-                destination.album = viewModel.getAlbum(for: indexPath)
-                destination.indexPath = indexPath
-                destination.statusLoading = dictionaryLoadingStatusForIndexPath[indexPath]
-            }
+            let indexPath = viewModel.getIndexPathSelectedRow()
+            destination.album = viewModel.getAlbum(for: indexPath)
+            destination.indexPath = indexPath
+            destination.statusLoading = dictionaryLoadingStatusForIndexPath[indexPath]
         default:
             break
         }
@@ -122,7 +115,7 @@ class NetworkCollectionVC: UICollectionViewController {
     private func addRefreshControl(){
         collectionView.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(refreshList), for: .valueChanged)
-        refreshControl.tintColor = UIColor.black
+        refreshControl.tintColor = UIColor(named: "borderNetworkCellColor")
         refreshControl.attributedTitle = NSAttributedString(string: "Обновление записей ...")
     }
     
@@ -136,7 +129,8 @@ class NetworkCollectionVC: UICollectionViewController {
 extension NetworkCollectionVC: UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        globalIndexPath = indexPath
+        guard let viewModel = viewModel else {return}
+        viewModel.selectRow(atIndexPath: indexPath)
         UIView.animate(withDuration: 0.12, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 4, options: .curveEaseIn, animations: {
             collectionView.cellForItem(at: indexPath)?.transform.a = 0.9
             collectionView.cellForItem(at: indexPath)?.transform.d = 0.9

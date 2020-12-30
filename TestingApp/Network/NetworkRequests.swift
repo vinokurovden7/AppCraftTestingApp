@@ -52,7 +52,7 @@ class NetworkRequests: NetworkRequestsViewModelType {
                 case .success(let responseData):
                     completion(responseData)
                 case .failure(let error):
-                    if self.retryCount <= 5 {
+                    if self.retryCount <= 4 {
                         self.retryCount += 1
                         self.downloadImageFromUrl(sessionManager: sessionManager, url: url) { (photo) in
                             self.retryCount = 0

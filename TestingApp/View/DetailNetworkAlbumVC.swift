@@ -14,19 +14,15 @@ class DetailNetworkAlbumVC: UICollectionViewController {
     var album: Album?
     var indexPath: IndexPath?
     var statusLoading: Int?
-    @IBOutlet var detailCollectionView: UICollectionView!
-    @IBOutlet weak var downloadAlbumButton: UIBarButtonItem!
     //Количество ячеек в строке
     private var countItems:CGFloat = 1
     //Отступ от краев экрана и между ячейками, если их в строке больше 1
     private let paddingPlit:CGFloat = 15
-    let loadingIndicator: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView()
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        spinner.color = .black
-        return spinner
-    }()
+    private let loadingIndicator = SharedVariables.sharedVariables.loadingIndicator
     private let refreshControl = UIRefreshControl()
+    
+    @IBOutlet var detailCollectionView: UICollectionView!
+    @IBOutlet weak var downloadAlbumButton: UIBarButtonItem!
     
     //MARK: Жизненный цикл
     override func viewLayoutMarginsDidChange() {
@@ -148,7 +144,7 @@ class DetailNetworkAlbumVC: UICollectionViewController {
     func addRefreshControl(){
         collectionView.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(refreshList), for: .valueChanged)
-        refreshControl.tintColor = UIColor.black
+        refreshControl.tintColor = UIColor(named: "borderNetworkCellColor")
         refreshControl.attributedTitle = NSAttributedString(string: "Обновление записей ...")
     }
     
@@ -157,12 +153,26 @@ class DetailNetworkAlbumVC: UICollectionViewController {
         viewModel.getPhotos(albumId: String(album.id))
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let viewModel = viewModel else {return}
+        switch segue.identifier {
+        case "showImage":
+            guard let destination = segue.destination as? ViewImageVC else { return }
+            let row = viewModel.getIndexPathSelectedRow().row
+            destination.image = viewModel.getPhotosArray()[row].url
+        default:
+            break
+        }
+    }
+    
 }
 
 extension DetailNetworkAlbumVC: UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //self.performSegue(withIdentifier: "showDetailAlbum", sender: self)
+        guard let viewModel = viewModel else { return }
+        viewModel.selectRow(atIndexPath: indexPath)
+        self.performSegue(withIdentifier: "showImage", sender: self)
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {

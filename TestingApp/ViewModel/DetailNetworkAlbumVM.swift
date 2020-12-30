@@ -13,6 +13,7 @@ class DetailNetworkAlbumVM: DetailNetworkAlbumViewModelType {
     private let photosUrl = "https://jsonplaceholder.typicode.com/photos"
     private let collectionView: UICollectionView
     var statusLoading: Int?
+    private var selectedIndexPath: IndexPath?
     
     init(collectionView: UICollectionView) {
         self.collectionView = collectionView
@@ -40,13 +41,7 @@ class DetailNetworkAlbumVM: DetailNetworkAlbumViewModelType {
     }
     
     func saveAlbum(album: Album, completion: @escaping (Bool) -> ()) {
-        let albumObject = AlbumObject()
-        albumObject.albumObjectID = "\(album.id)\(album.userId)"
-        albumObject.id = album.id
-        albumObject.title = album.title
-        albumObject.userId = album.userId
         let storageManager = StorageManager()
-        storageManager.saveAlbum(album: albumObject)
         var countPhotos = 0
         for photo in photosArray {
             DispatchQueue.global(qos: .background).async {
@@ -65,6 +60,12 @@ class DetailNetworkAlbumVM: DetailNetworkAlbumViewModelType {
                         NotificationCenter.default.post(name: Notification.Name("photoLoaded"),object: nil, userInfo: ["isLoaded":true])
                         countPhotos += 1
                         if countPhotos == self.photosArray.count {
+                            let albumObject = AlbumObject()
+                            albumObject.albumObjectID = "\(album.id)\(album.userId)"
+                            albumObject.id = album.id
+                            albumObject.title = album.title
+                            albumObject.userId = album.userId
+                            storageManager.saveAlbum(album: albumObject)
                             completion(imageData == nil)
                         }
                     }
@@ -87,6 +88,16 @@ class DetailNetworkAlbumVM: DetailNetworkAlbumViewModelType {
     func checkIsLoaded(id: Int) -> Bool {
         let storageManager = StorageManager()
         return storageManager.getAlbum(userId: id, title: nil)?.count ?? 0 > 0
+    }
+    
+    //MARK: Получить выбранную запись
+    func selectRow(atIndexPath indexPath: IndexPath) {
+        self.selectedIndexPath = indexPath
+    }
+    
+    //MARK: Получить IndexPath выбранной записи
+    func getIndexPathSelectedRow() -> IndexPath {
+        return self.selectedIndexPath ?? IndexPath(row: 0, section: 0)
     }
     
 }

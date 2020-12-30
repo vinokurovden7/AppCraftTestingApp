@@ -67,6 +67,18 @@ class DetailSavedAlbumsVC: UICollectionViewController {
             }
         }
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let viewModel = viewModel else {return}
+        switch segue.identifier {
+        case "showSavedImage":
+            guard let destination = segue.destination as? ViewImageVC else { return }
+            guard let photo = UIImage(data: (viewModel.getPhotos(for: viewModel.getIndexPathSelectedRow()).photo ?? UIImage(systemName: "apple")?.pngData())!) else {return}
+            destination.image = photo
+        default:
+            break
+        }
+    }
 
     @IBAction func deleteBarButtonItemAction(_ sender: UIBarButtonItem) {
         guard let viewModel = viewModel else { return }
@@ -76,7 +88,9 @@ class DetailSavedAlbumsVC: UICollectionViewController {
 extension DetailSavedAlbumsVC: UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        self.performSegue(withIdentifier: "showDetailAlbum", sender: self)
+        guard let viewModel = viewModel else { return }
+        viewModel.selectRow(atIndexPath: indexPath)
+        self.performSegue(withIdentifier: "showSavedImage", sender: self)
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {

@@ -47,6 +47,8 @@
 		9277008D2597B1E7004EA2DA /* DetailNetworkAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9277008C2597B1E7004EA2DA /* DetailNetworkAlbumCell.swift */; };
 		927700912597B3ED004EA2DA /* DetailNetworkAlbumVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927700902597B3ED004EA2DA /* DetailNetworkAlbumVM.swift */; };
 		927700A42599E062004EA2DA /* SharedVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927700A32599E062004EA2DA /* SharedVariables.swift */; };
+		92ACD198259CB5A3006DB2B3 /* ViewImageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92ACD197259CB5A3006DB2B3 /* ViewImageVC.swift */; };
+		92ACD19F259CCAAE006DB2B3 /* ImageScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92ACD19E259CCAAE006DB2B3 /* ImageScrollView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +96,10 @@
 		9277008C2597B1E7004EA2DA /* DetailNetworkAlbumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailNetworkAlbumCell.swift; sourceTree = "<group>"; };
 		927700902597B3ED004EA2DA /* DetailNetworkAlbumVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailNetworkAlbumVM.swift; sourceTree = "<group>"; };
 		927700A32599E062004EA2DA /* SharedVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedVariables.swift; sourceTree = "<group>"; };
+		92ACD197259CB5A3006DB2B3 /* ViewImageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewImageVC.swift; sourceTree = "<group>"; };
+		92ACD19E259CCAAE006DB2B3 /* ImageScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScrollView.swift; sourceTree = "<group>"; };
+		92ACD1A1259CF18C006DB2B3 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
+		92ACD1A2259CF18C006DB2B3 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +135,7 @@
 		923DD0F925971A66005B9E66 /* TestingApp */ = {
 			isa = PBXGroup;
 			children = (
+				92ACD19B259CCA67006DB2B3 /* CustomElements */,
 				925BD4B7259C8CD8006FAD64 /* Music */,
 				927700A22599E04C004EA2DA /* Global */,
 				92770073259797DC004EA2DA /* Realm */,
@@ -168,6 +175,7 @@
 				925BD494259B3AB3006FAD64 /* SavedAlbumsVC.swift */,
 				925BD4A6259BAFC6006FAD64 /* DetailSavedAlbumsVC.swift */,
 				923DD12625972A87005B9E66 /* UserLocationVC.swift */,
+				92ACD197259CB5A3006DB2B3 /* ViewImageVC.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -261,6 +269,14 @@
 			path = Global;
 			sourceTree = "<group>";
 		};
+		92ACD19B259CCA67006DB2B3 /* CustomElements */ = {
+			isa = PBXGroup;
+			children = (
+				92ACD19E259CCAAE006DB2B3 /* ImageScrollView.swift */,
+			);
+			path = CustomElements;
+			sourceTree = "<group>";
+		};
 		B76FD2CBAFB9985C0344D96C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -321,6 +337,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 923DD0EE25971A66005B9E66;
 			productRefGroup = 923DD0F825971A66005B9E66 /* Products */;
@@ -419,6 +436,8 @@
 				923DD13325974BCF005B9E66 /* NetworkRequestsViewModelType.swift in Sources */,
 				925BD49E259BAF83006FAD64 /* DetailSavedAlbumCellVM.swift in Sources */,
 				9277006B25976942004EA2DA /* NetworkCellViewModelType.swift in Sources */,
+				92ACD19F259CCAAE006DB2B3 /* ImageScrollView.swift in Sources */,
+				92ACD198259CB5A3006DB2B3 /* ViewImageVC.swift in Sources */,
 				9277007C2597A4EC004EA2DA /* DetailNetworkAlbumVC.swift in Sources */,
 				923DD12025972A1A005B9E66 /* NetworkCollectionVC.swift in Sources */,
 				923DD13C259750DE005B9E66 /* NetworkViewModelType.swift in Sources */,
@@ -438,6 +457,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				923DD10125971A66005B9E66 /* Base */,
+				92ACD1A1259CF18C006DB2B3 /* ru */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -446,6 +466,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				923DD10625971A67005B9E66 /* Base */,
+				92ACD1A2259CF18C006DB2B3 /* ru */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -457,6 +478,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -518,6 +540,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

@@ -21,6 +21,7 @@ class UserLocationVC: UIViewController, CLLocationManagerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         playerViewModel = PlayerVM(fileName: "superMarioSound")
         locationManager = CLLocationManager()
         locationManager?.requestAlwaysAuthorization()
@@ -29,23 +30,22 @@ class UserLocationVC: UIViewController, CLLocationManagerDelegate {
     }
     
     @IBAction func buttonUserlocationAction(_ sender: UIButton) {
+        guard let playerViewModel = playerViewModel, let locationManager = locationManager else { return }
         if isStaringLocation {
-            playerViewModel?.stopPlayMusic()
-            locationManager?.showsBackgroundLocationIndicator = false
-            locationManager?.stopUpdatingLocation()
+            playerViewModel.stopPlayMusic()
+            locationManager.showsBackgroundLocationIndicator = false
+            locationManager.stopUpdatingLocation()
             DispatchQueue.main.async { [self] in
-                buttonUserLocation.setImage(UIImage(systemName: "location.slash"), for: .normal)
                 buttonUserLocation.tintColor = .systemRed
                 labelUserLocation.text = ""
                 speedLabel.text = ""
             }
         } else {
-            playerViewModel?.playMusic()
-            locationManager?.showsBackgroundLocationIndicator = true
-            locationManager?.startUpdatingLocation()
+            playerViewModel.playMusic()
+            locationManager.showsBackgroundLocationIndicator = true
+            locationManager.startUpdatingLocation()
             DispatchQueue.main.async { [self] in
-                buttonUserLocation.imageView?.image = UIImage(systemName: "location")
-                buttonUserLocation.tintColor = .systemBlue
+                buttonUserLocation.tintColor = .systemGreen
             }
         }
         isStaringLocation = !isStaringLocation

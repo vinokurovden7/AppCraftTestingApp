@@ -15,4 +15,8 @@ protocol DetailNetworkAlbumViewModelType {
     func getPhotosArray() -> [Photo]
     func downloadImageFromUrl(url: String, completion: @escaping (Data?) -> ())
     func checkIsLoaded(id: Int) -> Bool
+    //MARK: Выбор ячейки
+    func selectRow(atIndexPath indexPath: IndexPath)
+    //MARK: Получить IndexPath выделенной ячейки
+    func getIndexPathSelectedRow() -> IndexPath
 }
