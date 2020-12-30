@@ -14,6 +14,7 @@ class UserLocationVC: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var buttonUserLocation: UIButton!
     @IBOutlet weak var speedLabel: UILabel!
     
+    //MARK: Variables
     private var playerViewModel: PlayerViewModelType?
     private var isStaringLocation: Bool = false
     private var locationManager: CLLocationManager?

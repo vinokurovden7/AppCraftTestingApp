@@ -7,6 +7,8 @@
 
 import CoreLocation
 protocol PlayerViewModelType {
+    
     func playMusic()
     func stopPlayMusic()
+    
 }

@@ -39,4 +39,5 @@ class PlayerVM: PlayerViewModelType {
             print(error)
         }
     }
+    
 }
