@@ -7,18 +7,15 @@
 
 import RealmSwift
 import UIKit
+/// Класс для работы детализации вкладки 'БД'
 class DetailSavedAlbumVM: DetailSavedAlbumViewModelType {
-    
+    //MARK: Variables
     private let storageManager = StorageManager()
     private var photos: Results<PhotoObject>!
     private var albumId: Int
     private var selectedIndexPath: IndexPath?
     
-    init(albumId: Int) {
-        self.photos = storageManager.getPhoto(albumId: albumId, title: nil)
-        self.albumId = albumId
-    }
-    
+    //MARK: Protocol functions
     func getPhotos(for indexPath: IndexPath) -> PhotoObject {
         return photos[indexPath.row]
     }
@@ -57,14 +54,17 @@ class DetailSavedAlbumVM: DetailSavedAlbumViewModelType {
         return alert
     }
     
-    //MARK: Получить выбранную запись
     func selectRow(atIndexPath indexPath: IndexPath) {
         self.selectedIndexPath = indexPath
     }
     
-    //MARK: Получить IndexPath выбранной записи
     func getIndexPathSelectedRow() -> IndexPath {
         return self.selectedIndexPath ?? IndexPath(row: 0, section: 0)
     }
     
+    //MARK: Init
+    init(albumId: Int) {
+        self.photos = storageManager.getPhoto(albumId: albumId, title: nil)
+        self.albumId = albumId
+    }
 }

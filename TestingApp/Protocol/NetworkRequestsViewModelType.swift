@@ -6,6 +6,10 @@
 //
 
 import Foundation
+/// Протокол для работы с сетью
 protocol NetworkRequestsViewModelType {
-    func getAlbumsRequest(url: String, completion: @escaping (_ albums: [Album]) -> ())
+    /// Получить список альбомов
+    /// - Parameters:
+    ///   - url: адрес запроса
+    func getAlbums(url: String, completion: @escaping (_ albums: [Album]) -> ())
 }

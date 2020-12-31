@@ -7,16 +7,14 @@
 
 import RealmSwift
 import UIKit
+/// Класс для работы вкладки 'БД'
 class SavedAlbumVM: SavedAlbumViewModelType {
-    
+    //MARK: Variables
     private let storageManager = StorageManager()
     private var albums: Results<AlbumObject>!
     private var selectedIndexPath: IndexPath?
     
-    init() {
-        albums = storageManager.getAlbum(userId: nil, title: nil)
-    }
-    
+    //MARK: Protocol functions
     func getNumberOfSections() -> Int {
         return 1
     }
@@ -39,15 +37,16 @@ class SavedAlbumVM: SavedAlbumViewModelType {
         return SavedAlbumCellVM(album: album)
     }
     
-    //MARK: Получить выбранную запись
     func selectRow(atIndexPath indexPath: IndexPath) {
         self.selectedIndexPath = indexPath
     }
     
-    //MARK: Получить IndexPath выбранной записи
     func getIndexPathSelectedRow() -> IndexPath {
         return self.selectedIndexPath ?? IndexPath(row: 0, section: 0)
     }
     
-    
+    //MARK: Init
+    init() {
+        albums = storageManager.getAlbum(userId: nil, title: nil)
+    }
 }

@@ -8,8 +8,6 @@
 import RealmSwift
 
 class StorageManager {
-    
-    //MARK: Работа с альбомом
     /// Сохранение альбома
     /// - Parameter album: альбом
     func saveAlbum(album: AlbumObject) {
@@ -28,6 +26,11 @@ class StorageManager {
         }
     }
     
+    /// Получение альбомов из БД
+    /// - Parameters:
+    ///   - userId: userID
+    ///   - title: Название альбома
+    /// - Returns: Results<AlbumObject>
     func getAlbum(userId: Int?, title: String?) -> Results<AlbumObject>! {
         if let id = userId, let title = title {
             let realm = try! Realm()
@@ -45,6 +48,11 @@ class StorageManager {
         
     }
     
+    /// Получение фото из БД
+    /// - Parameters:
+    ///   - albumId: id альбома
+    ///   - title: Название фото
+    /// - Returns: Results<PhotoObject>
     func getPhoto(albumId: Int, title: String?) -> Results<PhotoObject>! {
         if let title = title  {
             let realm = try! Realm()
@@ -56,8 +64,8 @@ class StorageManager {
         
     }
     
-    /// Удаление фотографий альбома
-    /// - Parameter photosArray: Массив альбомов
+    /// Удаление альбома с фотографиями
+    /// - Parameter albumId: id альбома
     func deleteAlbumWithPhoto(albumId: Int) {
         let realm = try! Realm()
         try! realm.write {

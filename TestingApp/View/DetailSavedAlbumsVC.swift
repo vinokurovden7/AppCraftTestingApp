@@ -7,20 +7,19 @@
 
 import UIKit
 
-
 class DetailSavedAlbumsVC: UICollectionViewController {
-
-    @IBOutlet weak var deleteBarButtonItem: UIBarButtonItem!
-    //MARK: Переменные
+    //MARK: Variables
     private let reuseIdentifier = "savedPhotoCell"
     private var viewModel: DetailSavedAlbumViewModelType?
-    //Количество ячеек в строке
     private var countItems:CGFloat = 1
-    //Отступ от краев экрана и между ячейками, если их в строке больше 1
+    //Отступ от краев экрана (и между ячейками, если их в строке больше 1)
     private let paddingPlit:CGFloat = 15
     var albumId: Int?
+    //MARK: IBOutlets
+    @IBOutlet weak var deleteBarButtonItem: UIBarButtonItem!
     
-    //MARK: Жизненный цикл
+    
+    //MARK: Overrides methods
     override func viewLayoutMarginsDidChange() {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
@@ -37,8 +36,6 @@ class DetailSavedAlbumsVC: UICollectionViewController {
         super.viewDidLoad()
         guard let albumId = albumId else { return }
         viewModel = DetailSavedAlbumVM(albumId: albumId)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("photoLoaded"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("photosDeleted"), object: nil)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -48,6 +45,19 @@ class DetailSavedAlbumsVC: UICollectionViewController {
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let viewModel = viewModel else {return}
+        switch segue.identifier {
+        case "showSavedImage":
+            guard let destination = segue.destination as? ViewImageVC else { return }
+            guard let photo = UIImage(data: (viewModel.getPhotos(for: viewModel.getIndexPathSelectedRow()).photo ?? UIImage(systemName: "apple")?.pngData())!) else {return}
+            destination.image = photo
+        default:
+            break
+        }
+    }
+    
+    //MARK: OBJC func
     /// Функция обработки notification
     /// - Parameter notification: входящий notification
     @objc func updateInterface(notification: Notification) {
@@ -68,23 +78,20 @@ class DetailSavedAlbumsVC: UICollectionViewController {
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let viewModel = viewModel else {return}
-        switch segue.identifier {
-        case "showSavedImage":
-            guard let destination = segue.destination as? ViewImageVC else { return }
-            guard let photo = UIImage(data: (viewModel.getPhotos(for: viewModel.getIndexPathSelectedRow()).photo ?? UIImage(systemName: "apple")?.pngData())!) else {return}
-            destination.image = photo
-        default:
-            break
-        }
+    //MARK: Custom func
+    private func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("photoLoaded"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("photosDeleted"), object: nil)
     }
 
+    //MARK: IBActions func
     @IBAction func deleteBarButtonItemAction(_ sender: UIBarButtonItem) {
         guard let viewModel = viewModel else { return }
         self.present(viewModel.confirmDeleteAlert(), animated: true)
     }
 }
+
+//MARK: UICollectionViewDelegateFlowLayout
 extension DetailSavedAlbumsVC: UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -97,7 +104,6 @@ extension DetailSavedAlbumsVC: UICollectionViewDelegateFlowLayout {
         guard let viewModel = viewModel else { return 1 }
         return viewModel.getNumberOfSections()
     }
-
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let viewModel = viewModel else { return 1 }

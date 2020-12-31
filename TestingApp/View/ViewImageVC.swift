@@ -8,22 +8,27 @@
 import UIKit
 
 class ViewImageVC: UIViewController {
-
+    //MARK: Variables
+    private let networkManager = NetworkRequests()
+    private let loadingIndicator = SharedVariables.sharedVariables.loadingIndicator
     var imageScrollView: ImageScrollView?
     var image: Any?
-    private let networkManager = NetworkRequests()
     
-    private let loadingIndicator = SharedVariables.sharedVariables.loadingIndicator
-    
+    //MARK: Overrides methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        checkImage()
+    }
+    
+    //MARK: Custom func
+    /// Проверка изображения
+    private func checkImage() {
         if let img = image as? UIImage {
             imageScrollView = ImageScrollView(frame: view.bounds)
             guard let imageScrollView = imageScrollView else { return }
             view.addSubview(imageScrollView)
             setupImageScrollView()
-            imageScrollView.set(image: img, dividier: 4)
+            imageScrollView.set(image: img)
         } else if let imageUrl = image as? String {
             activityIndicator(startAnimate: true)
             networkManager.downloadImageFromUrl(sessionManager: SharedVariables.sharedVariables.sessionManager, url: imageUrl) { [self] (image) in
@@ -33,14 +38,13 @@ class ViewImageVC: UIViewController {
                 guard let imageScrollView = imageScrollView else { return }
                 view.addSubview(imageScrollView)
                 setupImageScrollView()
-                imageScrollView.set(image: UIImage(data: imageData)!, dividier: 2)
+                imageScrollView.set(image: UIImage(data: imageData)!)
             }
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-    }
-    
+    /// Запуск/остановка индикатора загрузки
+    /// - Parameter startAnimate: включить/отключить анимацию
     private func activityIndicator(startAnimate: Bool) {
         if startAnimate {
             DispatchQueue.main.async(){ [self] in
@@ -57,7 +61,8 @@ class ViewImageVC: UIViewController {
             }
         }
     }
-
+    
+    /// Размещение imageScrollView
     private func setupImageScrollView() {
         imageScrollView?.translatesAutoresizingMaskIntoConstraints = false
         imageScrollView?.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -65,5 +70,4 @@ class ViewImageVC: UIViewController {
         imageScrollView?.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         imageScrollView?.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
     }
-
 }

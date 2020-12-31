@@ -6,19 +6,16 @@
 //
 
 import UIKit
+/// Класс детализации работы с сетью
 class DetailNetworkAlbumVM: DetailNetworkAlbumViewModelType {
     
-    //MARK: Свойства
+    //MARK: Variables
     private var photosArray: [Photo] = []
     private let photosUrl = "https://jsonplaceholder.typicode.com/photos"
-    private let collectionView: UICollectionView
     var statusLoading: Int?
     private var selectedIndexPath: IndexPath?
     
-    init(collectionView: UICollectionView) {
-        self.collectionView = collectionView
-    }
-    
+    //MARK: Protocol functions
     func getPhotos(albumId: String) {
         let networkManager: NetworkRequests = NetworkRequests()
         networkManager.getPhotoAlbum(url: photosUrl, parameters: albumId) { [self] photos in
@@ -52,14 +49,14 @@ class DetailNetworkAlbumVM: DetailNetworkAlbumViewModelType {
                 ph.title = photo.title
                 ph.thumbnailUrl = photo.thumbnailUrl
                 ph.url = photo.url
-                self.downloadImageFromUrl(url: photo.thumbnailUrl) { imageData in
+                self.downloadImageFromUrl(url: photo.thumbnailUrl) { [weak self] imageData in
                     ph.previewPhoto = imageData
-                    self.downloadImageFromUrl(url: photo.url) { imageData in
+                    self?.downloadImageFromUrl(url: photo.url) { [weak self] imageData in
                         ph.photo = imageData
                         storageManager.savePhoto(photo: ph)
                         NotificationCenter.default.post(name: Notification.Name("photoLoaded"),object: nil, userInfo: ["isLoaded":true])
                         countPhotos += 1
-                        if countPhotos == self.photosArray.count {
+                        if countPhotos == self?.photosArray.count {
                             let albumObject = AlbumObject()
                             albumObject.albumObjectID = "\(album.id)\(album.userId)"
                             albumObject.id = album.id
@@ -90,12 +87,10 @@ class DetailNetworkAlbumVM: DetailNetworkAlbumViewModelType {
         return storageManager.getAlbum(userId: id, title: nil)?.count ?? 0 > 0
     }
     
-    //MARK: Получить выбранную запись
     func selectRow(atIndexPath indexPath: IndexPath) {
         self.selectedIndexPath = indexPath
     }
     
-    //MARK: Получить IndexPath выбранной записи
     func getIndexPathSelectedRow() -> IndexPath {
         return self.selectedIndexPath ?? IndexPath(row: 0, section: 0)
     }

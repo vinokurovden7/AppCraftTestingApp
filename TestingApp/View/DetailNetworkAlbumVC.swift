@@ -6,25 +6,25 @@
 //
 
 import UIKit
-class DetailNetworkAlbumVC: UICollectionViewController {
 
+class DetailNetworkAlbumVC: UICollectionViewController {
     //MARK: Variables
-    private let reuseIdentifier = "photoCell"
-    private var viewModel: DetailNetworkAlbumViewModelType?
     var album: Album?
     var indexPath: IndexPath?
     var statusLoading: Int?
-    //Количество ячеек в строке
+    private let reuseIdentifier = "photoCell"
+    private var viewModel: DetailNetworkAlbumViewModelType?
     private var countItems:CGFloat = 1
-    //Отступ от краев экрана и между ячейками, если их в строке больше 1
+    //Отступ от краев экрана (и между ячейками, если их в строке больше 1)
     private let paddingPlit:CGFloat = 15
     private let loadingIndicator = SharedVariables.sharedVariables.loadingIndicator
     private let refreshControl = UIRefreshControl()
     
+    //MARK: IBOutlets
     @IBOutlet var detailCollectionView: UICollectionView!
     @IBOutlet weak var downloadAlbumButton: UIBarButtonItem!
     
-    //MARK: Жизненный цикл
+    //MARK: Overrides methods
     override func viewLayoutMarginsDidChange() {
         DispatchQueue.main.async { [self] in
             self.collectionView.reloadData()
@@ -41,12 +41,10 @@ class DetailNetworkAlbumVC: UICollectionViewController {
         super.viewDidLoad()
         addRefreshControl()
         activityIndicator(startAnimate: true)
-        viewModel = DetailNetworkAlbumVM(collectionView: collectionView)
+        viewModel = DetailNetworkAlbumVM()
         guard let viewModel = viewModel, let album = album else { return }
         viewModel.getPhotos(albumId: String(album.id))
-        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("loadingStatus"), object: self)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("photoIsLoaded"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("photosDeleted"), object: nil)
+        addObservers()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -56,6 +54,19 @@ class DetailNetworkAlbumVC: UICollectionViewController {
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let viewModel = viewModel else {return}
+        switch segue.identifier {
+        case "showImage":
+            guard let destination = segue.destination as? ViewImageVC else { return }
+            let row = viewModel.getIndexPathSelectedRow().row
+            destination.image = viewModel.getPhotosArray()[row].url
+        default:
+            break
+        }
+    }
+    
+    //MARK: IBActions func
     @IBAction func downloadAlbumButtonAction(_ sender: UIBarButtonItem) {
         DispatchQueue.global(qos: .background).async { [self] in
             guard let indexPath = self.indexPath else {return}
@@ -69,10 +80,83 @@ class DetailNetworkAlbumVC: UICollectionViewController {
         }
     }
     
+    //MARK: Custom func
+    /// Обновить значок статуса загрузки
+    /// - Parameter status: статус загрузки 0 - не загружено, 1 - загружается, 2 - загружено
+    private func updateStatusLoading(status: Int) {
+        switch status {
+        case 0: setImageStatusLoading(color: .systemBlue, systemName: "icloud.and.arrow.down")
+        case 1: setImageStatusLoading(color: nil, systemName: nil)
+        case 2: setImageStatusLoading(color: .systemGreen, systemName: "checkmark.icloud")
+        default: setImageStatusLoading(color: .systemRed, systemName: "exclamationmark.icloud")
+        }
+    }
+    
+    /// Установка изображения в зависимости от статуса загрузки
+    /// - Parameters:
+    ///   - color: цвет
+    ///   - image: изображение
+    private func setImageStatusLoading(color: UIColor?, systemName image: String?) {
+        if let color = color, let image = image {
+            DispatchQueue.main.async { [self] in
+                downloadAlbumButton.image = UIImage(systemName: image)
+                downloadAlbumButton.tintColor = color
+            }
+        } else {
+            DispatchQueue.main.async { [self] in
+                let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+                let barButton = UIBarButtonItem(customView: activityIndicator)
+                self.navigationItem.setRightBarButton(barButton, animated: true)
+                activityIndicator.startAnimating()
+                downloadAlbumButton.tintColor = .clear
+            }
+        }
+    }
+    
+    /// Запуск/остановка индикатора загрузки
+    /// - Parameter startAnimate: включить/отключить анимацию
+    private func activityIndicator(startAnimate: Bool) {
+        if startAnimate {
+            DispatchQueue.main.async() { [self] in
+                self.view.addSubview(loadingIndicator)
+                loadingIndicator.startAnimating()
+                NSLayoutConstraint.activate([loadingIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                                             loadingIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)])
+                self.view.bringSubviewToFront(loadingIndicator)
+            }
+        } else {
+            DispatchQueue.main.async() { [self] in
+                loadingIndicator.stopAnimating()
+                loadingIndicator.removeFromSuperview()
+            }
+        }
+    }
+    
+    /// Обновление записей
+    func addRefreshControl() {
+        collectionView.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(refreshList), for: .valueChanged)
+        refreshControl.tintColor = UIColor(named: "borderNetworkCellColor")
+        refreshControl.attributedTitle = NSAttributedString(string: "Обновление записей ...")
+    }
+    
+    /// Подпись на уведомления
+    private func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("loadingStatus"), object: self)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("photoIsLoaded"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("photosDeleted"), object: nil)
+    }
+    
+    //MARK: OBJC func
+    /// Обработчик refreshControl
+    @objc func refreshList() {
+        guard let viewModel = viewModel, let album = album else { return }
+        viewModel.getPhotos(albumId: String(album.id))
+    }
+    
     /// Функция обработки notification
     /// - Parameter notification: входящий notification
     @objc func updateInterface(notification: Notification) {
-        
         if let userInfo = notification.userInfo as? [String: [IndexPath:Int]], let status = userInfo["status"] {
             for (key,value) in status { if indexPath == key { updateStatusLoading(status: value) } }
         } else if let userInfo = notification.userInfo as? [String: Bool] {
@@ -95,78 +179,10 @@ class DetailNetworkAlbumVC: UICollectionViewController {
         }
     }
     
-    /// Обновить значок статуса загрузки
-    /// - Parameter status: статус загрузки 0 - не загружено, 1 - загружается, 2 - загружено
-    private func updateStatusLoading(status: Int) {
-        switch status {
-        case 0: setImageStatusLoading(color: .systemBlue, systemName: "icloud.and.arrow.down")
-        case 1: setImageStatusLoading(color: nil, systemName: nil)
-        case 2: setImageStatusLoading(color: .systemGreen, systemName: "checkmark.icloud")
-        default: setImageStatusLoading(color: .systemRed, systemName: "exclamationmark.icloud")
-        }
-    }
-    
-    private func setImageStatusLoading(color: UIColor?, systemName image: String?) {
-        if let color = color, let image = image {
-            DispatchQueue.main.async { [self] in
-                downloadAlbumButton.image = UIImage(systemName: image)
-                downloadAlbumButton.tintColor = color
-            }
-        } else {
-            DispatchQueue.main.async { [self] in
-                let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-                let barButton = UIBarButtonItem(customView: activityIndicator)
-                self.navigationItem.setRightBarButton(barButton, animated: true)
-                activityIndicator.startAnimating()
-                downloadAlbumButton.tintColor = .clear
-            }
-        }
-    }
-    
-    private func activityIndicator(startAnimate: Bool) {
-        if startAnimate {
-            DispatchQueue.main.async(){ [self] in
-                self.view.addSubview(loadingIndicator)
-                loadingIndicator.startAnimating()
-                NSLayoutConstraint.activate([loadingIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-                                             loadingIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)])
-                self.view.bringSubviewToFront(loadingIndicator)
-            }
-        } else {
-            DispatchQueue.main.async(){ [self] in
-                loadingIndicator.stopAnimating()
-                loadingIndicator.removeFromSuperview()
-            }
-        }
-    }
-    
-    //Обновление записей
-    func addRefreshControl(){
-        collectionView.addSubview(refreshControl)
-        refreshControl.addTarget(self, action: #selector(refreshList), for: .valueChanged)
-        refreshControl.tintColor = UIColor(named: "borderNetworkCellColor")
-        refreshControl.attributedTitle = NSAttributedString(string: "Обновление записей ...")
-    }
-    
-    @objc func refreshList(){
-        guard let viewModel = viewModel, let album = album else { return }
-        viewModel.getPhotos(albumId: String(album.id))
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let viewModel = viewModel else {return}
-        switch segue.identifier {
-        case "showImage":
-            guard let destination = segue.destination as? ViewImageVC else { return }
-            let row = viewModel.getIndexPathSelectedRow().row
-            destination.image = viewModel.getPhotosArray()[row].url
-        default:
-            break
-        }
-    }
     
 }
 
+// MARK: UICollectionViewDelegateFlowLayout
 extension DetailNetworkAlbumVC: UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

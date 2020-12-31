@@ -6,9 +6,12 @@
 //
 
 import CoreLocation
+/// Протокол для аудиоплеера
 protocol PlayerViewModelType {
     
+    /// Начать проигрывание
     func playMusic()
+    /// Остановить проигрывание
     func stopPlayMusic()
     
 }

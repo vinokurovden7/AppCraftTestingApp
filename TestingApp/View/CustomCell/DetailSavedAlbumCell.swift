@@ -8,11 +8,13 @@
 import UIKit
 
 class DetailSavedAlbumCell: UICollectionViewCell {
+    //MARK: IBOutlets
     @IBOutlet weak var cellBackgroundView: UIView!
     @IBOutlet weak var nameAlbumLabel: UILabel!
     @IBOutlet weak var withIthemConstraint: NSLayoutConstraint!
     @IBOutlet weak var previewImage: UIImageView!
     
+    //MARK: Variables
     weak var viewModel: DetailSavedAlbumCellViewModelType? {
         willSet(viewModel) {
             guard let viewModel = viewModel else { return }

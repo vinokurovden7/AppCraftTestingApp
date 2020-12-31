@@ -6,6 +6,8 @@
 //
 
 import Foundation
+///Протокол ячейки из вкладки 'БД'
 protocol SavedAlbumCellViewModelType: class {
+    /// Наименование альбома
     var nameAlbum: String {get}
 }

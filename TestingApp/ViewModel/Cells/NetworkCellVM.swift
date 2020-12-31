@@ -6,15 +6,14 @@
 //
 
 import UIKit
+/// Класс ячейки вкладки 'сеть'
 class NetworkCellVM: NetworkCellViewModelType {
+    //MARK: Variables
     private let album: Album
     private let storageManager = StorageManager()
     var nameAlbum: String {album.title}
     
-    /// Обновление статуса загрузки
-    /// - Parameters:
-    ///   - cell: ячейка для обновления
-    ///   - status: статус загрузки 0 - не загружено, 1 - загружается, 2 - загружено
+    //MARK: Protocols functions
     func updateStatusLoading(cell: NetworkCell, status: Int?) {
         if let status = status {
             switch status {
@@ -71,6 +70,7 @@ class NetworkCellVM: NetworkCellViewModelType {
         }
     }
     
+    //MARK: Init
     init(album: Album) {
         self.album = album
     }

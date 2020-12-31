@@ -8,20 +8,21 @@
 import UIKit
 
 class NetworkCollectionVC: UICollectionViewController {
-
-    //MARK: Переменные
+    
+    //MARK: Variables
     private let reuseIdentifier = "networkAlbumCell"
     private var viewModel: NetworkViewModelType?
-    //Количество ячеек в строке
     private var countItems:CGFloat = 1
-    //Отступ от краев экрана и между ячейками, если их в строке больше 1
+    /// Отступ от краев экрана (и между ячейками, если их в строке больше 1)
     private let paddingPlit:CGFloat = 15
     private var dictionaryLoadingStatusForIndexPath: [IndexPath:Int] = [:]
-    @IBOutlet var albumsCollectionView: UICollectionView!
     private let loadingIndicator = SharedVariables.sharedVariables.loadingIndicator
     private let refreshControl = UIRefreshControl()
+    //MARK: IBOutlets
+    @IBOutlet var albumsCollectionView: UICollectionView!
     
-    //MARK: Жизненный цикл
+    
+    //MARK: Overrides methods
     override func viewLayoutMarginsDidChange() {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
@@ -31,14 +32,12 @@ class NetworkCollectionVC: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addRefreshControl()
-        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("albumIsLoaded"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("photosDeleted"), object: nil)
+        addObservers()
         activityIndicator(startAnimate: true)
         viewModel = NetworkVM()
         guard let viewModel = viewModel else { return }
         viewModel.getAlbums()
     }
-    
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -60,6 +59,47 @@ class NetworkCollectionVC: UICollectionViewController {
         default:
             break
         }
+    }
+    
+    //MARK: Custom functions
+    /// Запуск/остановка индикатора загрузки
+    /// - Parameter startAnimate: включить/отключить анимацию
+    private func activityIndicator(startAnimate: Bool) {
+        if startAnimate {
+            DispatchQueue.main.async(){ [self] in
+                self.view.addSubview(loadingIndicator)
+                loadingIndicator.startAnimating()
+                NSLayoutConstraint.activate([loadingIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                                             loadingIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)])
+                self.view.bringSubviewToFront(loadingIndicator)
+            }
+        } else {
+            DispatchQueue.main.async(){ [self] in
+                loadingIndicator.stopAnimating()
+                loadingIndicator.removeFromSuperview()
+            }
+        }
+    }
+    
+    /// Добавление refreshControl
+    private func addRefreshControl(){
+        collectionView.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(refreshList), for: .valueChanged)
+        refreshControl.tintColor = UIColor(named: "borderNetworkCellColor")
+        refreshControl.attributedTitle = NSAttributedString(string: "Обновление записей ...")
+    }
+    
+    /// Подпись на уведомления
+    private func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("albumIsLoaded"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateInterface(notification:)), name: Notification.Name("photosDeleted"), object: nil)
+    }
+    
+    //MARK: OBJC func
+    /// Обработчик refreshControl
+    @objc func refreshList(){
+        guard let viewModel = viewModel else { return }
+        viewModel.getAlbums()
     }
     
     /// Функция обработки notification
@@ -94,38 +134,8 @@ class NetworkCollectionVC: UICollectionViewController {
         }
     }
     
-    private func activityIndicator(startAnimate: Bool) {
-        if startAnimate {
-            DispatchQueue.main.async(){ [self] in
-                self.view.addSubview(loadingIndicator)
-                loadingIndicator.startAnimating()
-                NSLayoutConstraint.activate([loadingIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-                                             loadingIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)])
-                self.view.bringSubviewToFront(loadingIndicator)
-            }
-        } else {
-            DispatchQueue.main.async(){ [self] in
-                loadingIndicator.stopAnimating()
-                loadingIndicator.removeFromSuperview()
-            }
-        }
-    }
-    
-    //Обновление записей
-    private func addRefreshControl(){
-        collectionView.addSubview(refreshControl)
-        refreshControl.addTarget(self, action: #selector(refreshList), for: .valueChanged)
-        refreshControl.tintColor = UIColor(named: "borderNetworkCellColor")
-        refreshControl.attributedTitle = NSAttributedString(string: "Обновление записей ...")
-    }
-    
-    @objc func refreshList(){
-        guard let viewModel = viewModel else { return }
-        viewModel.getAlbums()
-    }
-    
 }
-// MARK: UICollectionViewDelegate
+// MARK: UICollectionViewDelegateFlowLayout
 extension NetworkCollectionVC: UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

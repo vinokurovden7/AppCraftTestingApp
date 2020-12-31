@@ -8,18 +8,16 @@
 import UIKit
 
 class SavedAlbumsVC: UICollectionViewController {
-
-    //MARK: Переменные
+    //MARK: Variables
     private let reuseIdentifier = "savedAlbumCell"
     private var viewModel: SavedAlbumViewModelType?
     private var globalIndexPath: IndexPath? = nil
-    //Количество ячеек в строке
     private var countItems:CGFloat = 1
-    //Отступ от краев экрана и между ячейками, если их в строке больше 1
+    //Отступ от краев экрана (и между ячейками, если их в строке больше 1)
     private let paddingPlit:CGFloat = 15
     
     
-    //MARK: Жизненный цикл
+    //MARK: Overrides methods
     override func viewLayoutMarginsDidChange() {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
@@ -56,6 +54,7 @@ class SavedAlbumsVC: UICollectionViewController {
         }
     }
     
+    //MARK: OBJC func
     /// Функция обработки notification
     /// - Parameter notification: входящий notification
     @objc func updateInterface(notification: Notification) {
@@ -71,6 +70,7 @@ class SavedAlbumsVC: UICollectionViewController {
     }
 
 }
+//MARK: UICollectionViewDelegateFlowLayout
 extension SavedAlbumsVC: UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

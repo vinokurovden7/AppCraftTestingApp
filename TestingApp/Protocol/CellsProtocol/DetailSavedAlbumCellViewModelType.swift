@@ -6,7 +6,10 @@
 //
 
 import UIKit
+/// Протокол ячейки детализации из вкладки 'БД'
 protocol DetailSavedAlbumCellViewModelType: class {
+    /// Наименование фото
     var title: String {get}
+    /// Изображение
     var previewImage: UIImage {get}
 }

@@ -8,6 +8,7 @@
 import UIKit
 
 class NetworkCell: UICollectionViewCell {
+    //MARK: IBOutlets
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var nameAlbumLabel: UILabel!
     @IBOutlet weak var withIthemConstraint: NSLayoutConstraint!
@@ -19,6 +20,7 @@ class NetworkCell: UICollectionViewCell {
     }
     @IBOutlet weak var networkStatusAlbumImage: UIImageView!
     
+    //MARK: Variables
     weak var viewModel: NetworkCellViewModelType? {
         willSet(viewModel) {
             guard let viewModel = viewModel else { return }

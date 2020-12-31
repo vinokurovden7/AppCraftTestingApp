@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Структура альбомов
+/// Структура альбома
 struct Album {
     let id: Int
     let title: String
@@ -29,7 +29,7 @@ struct Album {
     }
 }
 
-/// Структура выбранного альбома
+/// Структура фотографии альбома
 struct Photo {
     let albumId: Int
     let id: Int

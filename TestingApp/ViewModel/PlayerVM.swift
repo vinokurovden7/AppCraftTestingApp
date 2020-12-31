@@ -7,10 +7,13 @@
 
 import AVFoundation
 import Foundation
+/// Класс для работы аудиоплеера
 class PlayerVM: PlayerViewModelType {
-    
+    //MARK: Variables
     private var audioPlayer = AVAudioPlayer()
     
+    
+    //MARK: Protocol functions
     func playMusic() {
         audioPlayer.play()
     }
@@ -22,6 +25,7 @@ class PlayerVM: PlayerViewModelType {
         }
     }
     
+    //MARK: Init
     init(fileName: String) {
         let filePath = Bundle.main.path(forResource: fileName, ofType: "mp3")
         guard let fP = filePath else {return}

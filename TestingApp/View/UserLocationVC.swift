@@ -8,27 +8,26 @@
 import UIKit
 import CoreLocation
 
-class UserLocationVC: UIViewController, CLLocationManagerDelegate {
-
-    @IBOutlet weak var labelUserLocation: UILabel!
-    @IBOutlet weak var buttonUserLocation: UIButton!
-    @IBOutlet weak var speedLabel: UILabel!
-    
+class UserLocationVC: UIViewController {
     //MARK: Variables
     private var playerViewModel: PlayerViewModelType?
     private var isStaringLocation: Bool = false
     private var locationManager: CLLocationManager?
     
+    //MARK: IBOutlets
+    @IBOutlet weak var labelUserLocation: UILabel!
+    @IBOutlet weak var buttonUserLocation: UIButton!
+    @IBOutlet weak var speedLabel: UILabel!
+    
+    
+    //MARK: Overrides methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupLocationManager()
         playerViewModel = PlayerVM(fileName: "superMarioSound")
-        locationManager = CLLocationManager()
-        locationManager?.requestAlwaysAuthorization()
-        locationManager?.allowsBackgroundLocationUpdates = true
-        locationManager?.delegate = self
     }
     
+    //MARK: IBActions func
     @IBAction func buttonUserlocationAction(_ sender: UIButton) {
         guard let playerViewModel = playerViewModel, let locationManager = locationManager else { return }
         if isStaringLocation {
@@ -51,6 +50,19 @@ class UserLocationVC: UIViewController, CLLocationManagerDelegate {
         isStaringLocation = !isStaringLocation
     }
     
+    //MARK: Custom func
+    private func setupLocationManager() {
+        locationManager = CLLocationManager()
+        guard let locationManager = locationManager else { return }
+        locationManager.requestAlwaysAuthorization()
+        locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.delegate = self
+    }
+    
+}
+
+//MARK: CLLocationManagerDelegate
+extension UserLocationVC: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
             DispatchQueue.main.async { [self] in
@@ -59,5 +71,4 @@ class UserLocationVC: UIViewController, CLLocationManagerDelegate {
             }
         }
     }
-    
 }
